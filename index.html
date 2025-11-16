@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recibo Médico - Dra. Ana Luiza Valadares</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&family=Cinzel:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .recibo-container {
+            max-width: 21cm;
+            margin: 0 auto;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            border-bottom: 2px solid #c9b5a0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .monogram {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            font-weight: 300;
+            color: #c9b5a0;
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .doctor-name {
+            font-size: 22px;
+            font-weight: 400;
+            color: #2d3748;
+            margin-bottom: 5px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .specialty {
+            font-size: 14px;
+            color: #c9b5a0;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .contact-info {
+            font-size: 11px;
+            color: #4a5568;
+            line-height: 1.4;
+        }
+        
+        .recibo-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 20px 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .form-section {
+            font-size: 12px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 4px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 6px 8px;
+            border: none;
+            border-bottom: 1px solid #cbd5e0;
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            background: transparent;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-bottom: 2px solid #c9b5a0;
+        }
+        
+        textarea {
+            resize: none;
+            height: 60px;
+            border: 1px solid #cbd5e0;
+            padding: 6px 8px;
+            text-transform: uppercase;
+        }
+        
+        .valor-destaque {
+            background-color: #f7fafc;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 3px solid #c9b5a0;
+            margin-bottom: 12px;
+        }
+        
+        .info-box {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 3px solid #ffc107;
+        }
+        
+        .info-box p {
+            font-size: 10px;
+            color: #856404;
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .assinatura {
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .linha-assinatura {
+            width: 250px;
+            margin: 0 auto;
+            border-top: 1px solid #2d3748;
+            padding-top: 8px;
+            font-size: 12px;
+            color: #4a5568;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            border: none;
+            padding: 12px 30px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-print {
+            background: #c9b5a0;
+            color: white;
+            box-shadow: 0 4px 15px rgba(201, 181, 160, 0.3);
+        }
+        
+        .btn-print:hover {
+            background: #b39f8a;
+            transform: translateY(-2px);
+        }
+        
+        .btn-clear {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-clear:hover {
+            background: #cbd5e0;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 400;
+            cursor: pointer;
+        }
+        
+        .checkbox-label input {
+            width: auto;
+            cursor: pointer;
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+            
+            .recibo-container {
+                padding: 15px;
+                box-shadow: none;
+                max-width: 100%;
+            }
+            
+            .button-container,
+            .info-box {
+                display: none !important;
+            }
+        }
+        
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+    </style>
+</head>
+<body>
+    <div class="recibo-container">
+        <div class="header">
+            <div class="monogram">LV</div>
+            <div class="doctor-name">Ana Luiza Valadares</div>
+            <div class="specialty">Dermatologia</div>
+            <div class="contact-info">
+                <strong>CRM:</strong> 22857 | <strong>CPF:</strong> 082.870.124-57<br>
+                <strong>E-mail:</strong> valadares.analuiza@gmail.com<br>
+                <strong>Endereço:</strong> Riomar Trade Center, Torre C, Sala 2008<br>
+                <strong>Telefone:</strong> (81) 99608-1696
+            </div>
+        </div>
+        
+        <h2 class="recibo-title">RECIBO</h2>
+        
+        <div class="form-section">
+            <div class="form-row">
+                <div class="form-group" style="flex: 0.5;">
+                    <label>Nº:</label>
+                    <input type="text" id="numero" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>Data de Realização do Atendimento: *</label>
+                    <input type="date" id="data" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Nome Completo do Paciente: *</label>
+                <input type="text" id="nome" value="ANA FABRÍCIA DE ASSIS ALMEIDA" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>CPF do Paciente: *</label>
+                    <input type="text" id="cpf" value="448.726.074-49" placeholder="000.000.000-00" maxlength="14" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefone:</label>
+                    <input type="text" id="telefone" value="(81) 98624-2556" placeholder="(00) 00000-0000" maxlength="15">
+                </div>
+            </div>
+            
+            <div class="valor-destaque">
+                <label>Valor Cobrado (R$): *</label>
+                <input type="text" id="valor" placeholder="R$ 0,00" style="font-weight: 600;" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Valor por Extenso: *</label>
+                <input type="text" id="valorExtenso" placeholder="Ex: Duzentos reais" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Discriminação do Serviço Realizado: *</label>
+                <textarea id="servico" placeholder="Ex: Consulta dermatológica em consultório" required></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Código CID-10: *</label>
+                    <input type="text" id="cid" placeholder="Ex: L70.0" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Forma de Pagamento:</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="pagamento" value="PIX"> PIX
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="pagamento" value="Dinheiro"> Dinheiro
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="pagamento" value="Débito"> Débito
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="pagamento" value="Crédito"> Crédito
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="pagamento" value="Transferência"> Transferência
+                    </label>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <p>
+                    <strong>⚠️ Campos obrigatórios Sul América (*):</strong> Nome e CPF do paciente | Data do atendimento | Valor (numérico e extenso) | CRM e especialidade | Endereço e telefone | Discriminação do serviço | CID | Assinatura
+                </p>
+            </div>
+        </div>
+        
+        <div class="assinatura">
+            <div class="linha-assinatura">
+                Dra. Ana Luiza Valadares<br>
+                CRM: 22857
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button class="btn btn-clear" onclick="limparFormulario()">🗑️ Limpar Formulário</button>
+            <button class="btn btn-print" onclick="imprimirRecibo()">🖨️ Imprimir Recibo</button>
+        </div>
+    </div>
+
+    <script>
+        // Formatar CPF
+        document.getElementById('cpf').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                e.target.value = value;
+            }
+        });
+
+        // Converter nome para maiúsculas automaticamente
+        document.getElementById('nome').addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        // Formatar Telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                e.target.value = value;
+            }
+        });
+
+        // Formatar Valor
+        document.getElementById('valor').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = (parseInt(value) / 100).toFixed(2);
+            e.target.value = 'R$ ' + value.replace('.', ',');
+        });
+
+        // Converter valor para extenso automaticamente
+        document.getElementById('valor').addEventListener('blur', function() {
+            const valor = this.value.replace(/\D/g, '');
+            const valorNumerico = parseInt(valor) / 100;
+            if (valorNumerico > 0) {
+                const extenso = numeroParaExtenso(valorNumerico);
+                document.getElementById('valorExtenso').value = extenso;
+            }
+        });
+
+        // Função para converter número para extenso (simplificada)
+        function numeroParaExtenso(numero) {
+            const unidades = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
+            const especiais = ['dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'];
+            const dezenas = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
+            const centenas = ['', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos', 'oitocentos', 'novecentos'];
+
+            if (numero === 0) return 'zero reais';
+            if (numero === 100) return 'cem reais';
+
+            let extenso = '';
+            const inteiro = Math.floor(numero);
+            const centavos = Math.round((numero - inteiro) * 100);
+
+            // Centenas
+            const c = Math.floor(inteiro / 100);
+            if (c > 0) extenso += centenas[c];
+
+            // Dezenas e unidades
+            const du = inteiro % 100;
+            if (du >= 10 && du < 20) {
+                if (extenso) extenso += ' e ';
+                extenso += especiais[du - 10];
+            } else {
+                const d = Math.floor(du / 10);
+                const u = du % 10;
+                if (d > 0) {
+                    if (extenso) extenso += ' e ';
+                    extenso += dezenas[d];
+                }
+                if (u > 0) {
+                    if (extenso) extenso += ' e ';
+                    extenso += unidades[u];
+                }
+            }
+
+            extenso += inteiro === 1 ? ' real' : ' reais';
+
+            if (centavos > 0) {
+                extenso += ' e ' + centavos + ' centavos';
+            }
+
+            return extenso.charAt(0).toUpperCase() + extenso.slice(1);
+        }
+
+        // Gerar número do recibo automaticamente no formato yyyymmddhhmm
+        function gerarNumeroRecibo() {
+            const agora = new Date();
+            const ano = agora.getFullYear();
+            const mes = String(agora.getMonth() + 1).padStart(2, '0');
+            const dia = String(agora.getDate()).padStart(2, '0');
+            const hora = String(agora.getHours()).padStart(2, '0');
+            const minuto = String(agora.getMinutes()).padStart(2, '0');
+            
+            return `${ano}${mes}${dia}${hora}${minuto}`;
+        }
+
+        // Definir número do recibo e data atual
+        document.getElementById('numero').value = gerarNumeroRecibo();
+        document.getElementById('data').valueAsDate = new Date();
+
+        // Função para imprimir
+        function imprimirRecibo() {
+            // Validar campos obrigatórios
+            const camposObrigatorios = ['nome', 'cpf', 'data', 'valor', 'valorExtenso', 'servico', 'cid'];
+            let camposVazios = [];
+            
+            camposObrigatorios.forEach(campo => {
+                const elemento = document.getElementById(campo);
+                if (!elemento.value.trim()) {
+                    camposVazios.push(campo);
+                    elemento.style.borderBottom = '2px solid red';
+                } else {
+                    elemento.style.borderBottom = '1px solid #cbd5e0';
+                }
+            });
+
+            if (camposVazios.length > 0) {
+                alert('⚠️ Por favor, preencha todos os campos obrigatórios marcados com (*) antes de imprimir.');
+                return;
+            }
+
+            window.print();
+        }
+
+        // Função para limpar formulário
+        function limparFormulario() {
+            if (confirm('Tem certeza que deseja limpar todos os campos?')) {
+                document.querySelectorAll('input, textarea').forEach(elemento => {
+                    if (elemento.type === 'checkbox') {
+                        elemento.checked = false;
+                    } else if (elemento.type === 'date') {
+                        elemento.valueAsDate = new Date();
+                    } else if (elemento.id === 'numero') {
+                        elemento.value = gerarNumeroRecibo();
+                    } else {
+                        elemento.value = '';
+                    }
+                    elemento.style.borderBottom = '1px solid #cbd5e0';
+                });
+                
+                // Limpar localStorage
+                localStorage.clear();
+                
+                // Restaurar número e data
+                document.getElementById('numero').value = gerarNumeroRecibo();
+                document.getElementById('data').valueAsDate = new Date();
+            }
+        }
+
+        // Salvar dados no localStorage ao digitar (opcional - para não perder dados)
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            // Não carregar/salvar o número do recibo (sempre gerado automaticamente)
+            if (input.id === 'numero') return;
+            
+            // Carregar dados salvos
+            const savedValue = localStorage.getItem(input.id);
+            if (savedValue && input.type !== 'date') {
+                input.value = savedValue;
+            }
+
+            // Salvar automaticamente
+            input.addEventListener('input', function() {
+                if (this.id !== 'numero') {
+                    localStorage.setItem(this.id, this.value);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
