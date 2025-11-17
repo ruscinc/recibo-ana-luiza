@@ -454,8 +454,6 @@
 					style="width: 300px; height: auto; margin-bottom: 10px"
 				/>
 
-				
-
 				<!--             <div class="doctor-name">Ana Luiza Valadares</div>
 
                          <div class="specialty">Dermatologia</div> -->
@@ -612,387 +610,309 @@
 			</div>
 		</div>
 
-		
-
 		<script>
+			// Gerar número do recibo automaticamente no formato yyyymmddhhmm
+
+			function gerarNumeroRecibo() {
+				const agora = new Date();
 
-			        // Gerar número do recibo automaticamente no formato yyyymmddhhmm
+				const ano = agora.getFullYear();
 
-			        function gerarNumeroRecibo() {
+				const mes = String(agora.getMonth() + 1).padStart(2, '0');
 
-			            const agora = new Date();
+				const dia = String(agora.getDate()).padStart(2, '0');
 
-			            const ano = agora.getFullYear();
+				const hora = String(agora.getHours()).padStart(2, '0');
 
-			            const mes = String(agora.getMonth() + 1).padStart(2, '0');
+				const minuto = String(agora.getMinutes()).padStart(2, '0');
 
-			            const dia = String(agora.getDate()).padStart(2, '0');
+				return `${ano}${mes}${dia}${hora}${minuto}`;
+			}
 
-			            const hora = String(agora.getHours()).padStart(2, '0');
+			// Função para converter número para extenso
 
-			            const minuto = String(agora.getMinutes()).padStart(2, '0');
+			function numeroParaExtenso(numero) {
+				const unidades = [
+					'',
+					'um',
+					'dois',
+					'três',
+					'quatro',
+					'cinco',
+					'seis',
+					'sete',
+					'oito',
+					'nove',
+				];
 
+				const especiais = [
+					'dez',
+					'onze',
+					'doze',
+					'treze',
+					'quatorze',
+					'quinze',
+					'dezesseis',
+					'dezessete',
+					'dezoito',
+					'dezenove',
+				];
 
+				const dezenas = [
+					'',
+					'',
+					'vinte',
+					'trinta',
+					'quarenta',
+					'cinquenta',
+					'sessenta',
+					'setenta',
+					'oitenta',
+					'noventa',
+				];
 
-			            return `${ano}${mes}${dia}${hora}${minuto}`;
+				const centenas = [
+					'',
+					'cento',
+					'duzentos',
+					'trezentos',
+					'quatrocentos',
+					'quinhentos',
+					'seiscentos',
+					'setecentos',
+					'oitocentos',
+					'novecentos',
+				];
 
-			        }
+				if (numero === 0) return 'zero reais';
+
+				if (numero === 100) return 'cem reais';
+
+				let extenso = '';
+
+				const inteiro = Math.floor(numero);
+
+				const centavos = Math.round((numero - inteiro) * 100);
+
+				// Centenas
+
+				const c = Math.floor(inteiro / 100);
+
+				if (c > 0) extenso += centenas[c];
+
+				// Dezenas e unidades
+
+				const du = inteiro % 100;
+
+				if (du >= 10 && du < 20) {
+					if (extenso) extenso += ' e ';
+
+					extenso += especiais[du - 10];
+				} else {
+					const d = Math.floor(du / 10);
 
-			
+					const u = du % 10;
 
-			        // Função para converter número para extenso
+					if (d > 0) {
+						if (extenso) extenso += ' e ';
 
-			        function numeroParaExtenso(numero) {
+						extenso += dezenas[d];
+					}
 
-			            const unidades = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
+					if (u > 0) {
+						if (extenso) extenso += ' e ';
 
-			            const especiais = ['dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'];
+						extenso += unidades[u];
+					}
+				}
 
-			            const dezenas = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
+				extenso += inteiro === 1 ? ' real' : ' reais';
 
-			            const centenas = ['', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos', 'oitocentos', 'novecentos'];
+				if (centavos > 0) {
+					extenso += ' e ' + centavos + ' centavos';
+				}
 
-			
+				return extenso.charAt(0).toUpperCase() + extenso.slice(1);
+			}
 
-			            if (numero === 0) return 'zero reais';
+			// Função para imprimir
 
-			            if (numero === 100) return 'cem reais';
+			function imprimirRecibo() {
+				const camposObrigatorios = [
+					'nome',
+					'cpf',
+					'data',
+					'valor',
+					'valorExtenso',
+					'servico',
+					'cid',
+				];
 
-			
+				let camposVazios = [];
 
-			            let extenso = '';
+				camposObrigatorios.forEach((campo) => {
+					const elemento = document.getElementById(campo);
 
-			            const inteiro = Math.floor(numero);
+					if (!elemento.value.trim()) {
+						camposVazios.push(campo);
 
-			            const centavos = Math.round((numero - inteiro) * 100);
+						elemento.style.borderBottom = '2px solid red';
+					} else {
+						elemento.style.borderBottom = '1px solid #cbd5e0';
+					}
+				});
 
-			
+				if (camposVazios.length > 0) {
+					alert(
+						'⚠️ Por favor, preencha todos os campos obrigatórios marcados com (*) antes de imprimir.'
+					);
 
-			            // Centenas
+					return;
+				}
 
-			            const c = Math.floor(inteiro / 100);
+				window.print();
+			}
 
-			            if (c > 0) extenso += centenas[c];
+			// Função para limpar formulário
 
-			
+			function limparFormulario() {
+				if (confirm('Tem certeza que deseja limpar todos os campos?')) {
+					document.querySelectorAll('input, textarea').forEach((elemento) => {
+						if (elemento.type === 'checkbox') {
+							elemento.checked = false;
+						} else if (elemento.type === 'date') {
+							elemento.valueAsDate = new Date();
+						} else if (elemento.id === 'numero') {
+							elemento.value = gerarNumeroRecibo();
+						} else if (elemento.id === 'nome') {
+							elemento.value = 'ANA FABRÍCIA DE ASSIS ALMEIDA';
+						} else if (elemento.id === 'cpf') {
+							elemento.value = '448.726.074-49';
+						} else if (elemento.id === 'telefone') {
+							elemento.value = '(81) 98624-2556';
+						} else {
+							elemento.value = '';
+						}
 
-			            // Dezenas e unidades
+						elemento.style.borderBottom = '1px solid #cbd5e0';
+					});
 
-			            const du = inteiro % 100;
+					localStorage.clear();
 
-			            if (du >= 10 && du < 20) {
+					document.getElementById('pagamentoTexto').style.display = 'none';
+				}
+			}
 
-			                if (extenso) extenso += ' e ';
+			// Aguardar DOM estar pronto
 
-			                extenso += especiais[du - 10];
+			document.addEventListener('DOMContentLoaded', function () {
+				// Definir número do recibo e data atual
 
-			            } else {
+				document.getElementById('numero').value = gerarNumeroRecibo();
 
-			                const d = Math.floor(du / 10);
+				document.getElementById('data').valueAsDate = new Date();
 
-			                const u = du % 10;
+				// Formatar CPF
 
-			                if (d > 0) {
+				document.getElementById('cpf').addEventListener('input', function (e) {
+					let value = e.target.value.replace(/\D/g, '');
 
-			                    if (extenso) extenso += ' e ';
+					if (value.length <= 11) {
+						value = value.replace(/(\d{3})(\d)/, '$1.$2');
 
-			                    extenso += dezenas[d];
+						value = value.replace(/(\d{3})(\d)/, '$1.$2');
 
-			                }
+						value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 
-			                if (u > 0) {
+						e.target.value = value;
+					}
+				});
 
-			                    if (extenso) extenso += ' e ';
+				// Converter nome para maiúsculas
 
-			                    extenso += unidades[u];
+				document.getElementById('nome').addEventListener('input', function (e) {
+					e.target.value = e.target.value.toUpperCase();
+				});
 
-			                }
+				// Atualizar formas de pagamento
 
-			            }
+				document.querySelectorAll('input[name="pagamento"]').forEach((checkbox) => {
+					checkbox.addEventListener('change', function () {
+						const selecionados = Array.from(
+							document.querySelectorAll('input[name="pagamento"]:checked')
+						)
+						.map((cb) => cb.value);
 
-			
+						const textoDiv = document.getElementById('pagamentoTexto');
 
-			            extenso += inteiro === 1 ? ' real' : ' reais';
+						if (selecionados.length > 0) {
+							textoDiv.textContent = selecionados.join(', ');
 
-			
+							textoDiv.style.display = 'block';
+						} else {
+							textoDiv.style.display = 'none';
+						}
+					});
+				});
 
-			            if (centavos > 0) {
+				// Formatar Telefone
 
-			                extenso += ' e ' + centavos + ' centavos';
+				document.getElementById('telefone').addEventListener('input', function (e) {
+					let value = e.target.value.replace(/\D/g, '');
 
-			            }
+					if (value.length <= 11) {
+						value = value.replace(/(\d{2})(\d)/, '($1) $2');
 
-			
+						value = value.replace(/(\d{5})(\d)/, '$1-$2');
 
-			            return extenso.charAt(0).toUpperCase() + extenso.slice(1);
+						e.target.value = value;
+					}
+				});
 
-			        }
+				// Formatar Valor
 
-			
+				document.getElementById('valor').addEventListener('input', function (e) {
+					let value = e.target.value.replace(/\D/g, '');
 
-			        // Função para imprimir
+					if (value) {
+						value = (parseInt(value) / 100).toFixed(2);
 
-			        function imprimirRecibo() {
+						e.target.value = 'R$ ' + value.replace('.', ',');
+					}
+				});
 
-			            const camposObrigatorios = ['nome', 'cpf', 'data', 'valor', 'valorExtenso', 'servico', 'cid'];
+				// Converter valor para extenso
 
-			            let camposVazios = [];
+				document.getElementById('valor').addEventListener('blur', function () {
+					const valor = this.value.replace(/\D/g, '');
 
+					const valorNumerico = parseInt(valor) / 100;
 
+					if (valorNumerico > 0) {
+						document.getElementById('valorExtenso').value = numeroParaExtenso(valorNumerico);
+					}
+				});
 
-			            camposObrigatorios.forEach(campo => {
+				// Salvar no localStorage
 
-			                const elemento = document.getElementById(campo);
+				const inputs = document.querySelectorAll('input, textarea');
 
-			                if (!elemento.value.trim()) {
+				inputs.forEach((input) => {
+					if (input.id === 'numero') return;
 
-			                    camposVazios.push(campo);
+					const savedValue = localStorage.getItem(input.id);
 
-			                    elemento.style.borderBottom = '2px solid red';
+					if (savedValue && input.type !== 'date' && input.type !== 'checkbox') {
+						input.value = savedValue;
+					}
 
-			                } else {
-
-			                    elemento.style.borderBottom = '1px solid #cbd5e0';
-
-			                }
-
-			            });
-
-			
-
-			            if (camposVazios.length > 0) {
-
-			                alert('⚠️ Por favor, preencha todos os campos obrigatórios marcados com (*) antes de imprimir.');
-
-			                return;
-
-			            }
-
-			
-
-			            window.print();
-
-			        }
-
-			
-
-			        // Função para limpar formulário
-
-			        function limparFormulario() {
-
-			            if (confirm('Tem certeza que deseja limpar todos os campos?')) {
-
-			                document.querySelectorAll('input, textarea').forEach(elemento => {
-
-			                    if (elemento.type === 'checkbox') {
-
-			                        elemento.checked = false;
-
-			                    } else if (elemento.type === 'date') {
-
-			                        elemento.valueAsDate = new Date();
-
-			                    } else if (elemento.id === 'numero') {
-
-			                        elemento.value = gerarNumeroRecibo();
-
-			                    } else if (elemento.id === 'nome') {
-
-			                        elemento.value = 'ANA FABRÍCIA DE ASSIS ALMEIDA';
-
-			                    } else if (elemento.id === 'cpf') {
-
-			                        elemento.value = '448.726.074-49';
-
-			                    } else if (elemento.id === 'telefone') {
-
-			                        elemento.value = '(81) 98624-2556';
-
-			                    } else {
-
-			                        elemento.value = '';
-
-			                    }
-
-			                    elemento.style.borderBottom = '1px solid #cbd5e0';
-
-			                });
-
-
-
-			                localStorage.clear();
-
-			                document.getElementById('pagamentoTexto').style.display = 'none';
-
-			            }
-
-			        }
-
-			
-
-			        // Aguardar DOM estar pronto
-
-			        document.addEventListener('DOMContentLoaded', function() {
-
-			            // Definir número do recibo e data atual
-
-			            document.getElementById('numero').value = gerarNumeroRecibo();
-
-			            document.getElementById('data').valueAsDate = new Date();
-
-
-
-			            // Formatar CPF
-
-			            document.getElementById('cpf').addEventListener('input', function(e) {
-
-			                let value = e.target.value.replace(/\D/g, '');
-
-			                if (value.length <= 11) {
-
-			                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-
-			                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-
-			                    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-
-			                    e.target.value = value;
-
-			                }
-
-			            });
-
-			
-
-			            // Converter nome para maiúsculas
-
-			            document.getElementById('nome').addEventListener('input', function(e) {
-
-			                e.target.value = e.target.value.toUpperCase();
-
-			            });
-
-			
-
-			            // Atualizar formas de pagamento
-
-			            document.querySelectorAll('input[name="pagamento"]').forEach(checkbox => {
-
-			                checkbox.addEventListener('change', function() {
-
-			                    const selecionados = Array.from(document.querySelectorAll('input[name="pagamento"]:checked'))
-
-			                        .map(cb => cb.value);
-
-			                    const textoDiv = document.getElementById('pagamentoTexto');
-
-			                    if (selecionados.length > 0) {
-
-			                        textoDiv.textContent = selecionados.join(', ');
-
-			                        textoDiv.style.display = 'block';
-
-			                    } else {
-
-			                        textoDiv.style.display = 'none';
-
-			                    }
-
-			                });
-
-			            });
-
-			
-
-			            // Formatar Telefone
-
-			            document.getElementById('telefone').addEventListener('input', function(e) {
-
-			                let value = e.target.value.replace(/\D/g, '');
-
-			                if (value.length <= 11) {
-
-			                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
-
-			                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
-
-			                    e.target.value = value;
-
-			                }
-
-			            });
-
-			
-
-			            // Formatar Valor
-
-			            document.getElementById('valor').addEventListener('input', function(e) {
-
-			                let value = e.target.value.replace(/\D/g, '');
-
-			                if (value) {
-
-			                    value = (parseInt(value) / 100).toFixed(2);
-
-			                    e.target.value = 'R$ ' + value.replace('.', ',');
-
-			                }
-
-			            });
-
-			
-
-			            // Converter valor para extenso
-
-			            document.getElementById('valor').addEventListener('blur', function() {
-
-			                const valor = this.value.replace(/\D/g, '');
-
-			                const valorNumerico = parseInt(valor) / 100;
-
-			                if (valorNumerico > 0) {
-
-			                    document.getElementById('valorExtenso').value = numeroParaExtenso(valorNumerico);
-
-			                }
-
-			            });
-
-			
-
-			            // Salvar no localStorage
-
-			            const inputs = document.querySelectorAll('input, textarea');
-
-			            inputs.forEach(input => {
-
-			                if (input.id === 'numero') return;
-
-
-
-			                const savedValue = localStorage.getItem(input.id);
-
-			                if (savedValue && input.type !== 'date' && input.type !== 'checkbox') {
-
-			                    input.value = savedValue;
-
-			                }
-
-			
-
-			                input.addEventListener('input', function() {
-
-			                    if (this.id !== 'numero') {
-
-			                        localStorage.setItem(this.id, this.value);
-
-			                    }
-
-			                });
-
-			            });
-
-			        });
+					input.addEventListener('input', function () {
+						if (this.id !== 'numero') {
+							localStorage.setItem(this.id, this.value);
+						}
+					});
+				});
+			});
 		</script>
 	</body>
 </html>
